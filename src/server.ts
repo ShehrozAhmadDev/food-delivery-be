@@ -4,12 +4,14 @@ import http from "http";
 import config from "./config";
 import database from "./database";
 import { blue, bold, yellow } from "colors";
+import bodyParser from "body-parser";
 
 const app: Express = express();
 const PORT: number = parseInt(config.PORT as string, 10);
 
 const server = http.createServer(app);
-
+app.use(bodyParser.json({ limit: "30mb" }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 //Initialize Routes
 app.use("/api", apiRoutes);
 

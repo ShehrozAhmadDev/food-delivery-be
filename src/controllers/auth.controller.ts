@@ -35,6 +35,7 @@ export const login = async (req: Request, res: Response) => {
  * Creates new instance of User in database
  */
 export const signUp = async (req: Request, res: Response) => {
+  console.log(req.body)
   const {
     fullName,
     email,
