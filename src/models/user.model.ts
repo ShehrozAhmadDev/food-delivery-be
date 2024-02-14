@@ -27,10 +27,6 @@ const userSchema = new Schema<IUserDocument>(
           `${props.value} is not a valid password. Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character and must be between 8 and 20 characters long.`,
       },
     },
-    verified: {
-      type: Boolean,
-      default: false,
-    },
     role: {
       type: String,
       enum: [Roles.ADMIN, Roles.USER],

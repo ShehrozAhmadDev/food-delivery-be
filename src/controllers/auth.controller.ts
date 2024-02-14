@@ -17,17 +17,12 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Email/Password does not match" });
   }
 
-  if (!user.verified) {
-    return res.status(401).json({ message: "User not verified!" });
-  }
-
   const token = await user.getToken();
   return res.status(200).json({
     status: 200,
     message: "Logged In",
     token,
-    email: user.email,
-    fullName: user.fullName,
+    user: user
   });
 };
 
@@ -65,7 +60,7 @@ export const signUp = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     status: 200,
-    message: `User signed up successfully, email has been sent to ${email} for verification`,
+    message: `User signed up successfully ${email} `,
     user: user
   });
 };
@@ -130,4 +125,68 @@ export const resetPassword = async (req: Request, res: Response) => {
   return res
     .status(200)
     .json({ status: 200, message: "Reset password successful!" });
+};
+
+
+
+
+
+/**
+ * Update password
+ */
+export const updateUserPassword = async (req: Request, res: Response) => {
+  const { currentPassword, newPassword, confirmNewPassword } = req.body;
+  if(confirmNewPassword !== newPassword) {
+    res.status(200).json({message: "Confrim password does not match with new password"})
+  }
+  if(req.user && req.user.id){
+    const user = await User.findById( req.user.id);
+  
+    if (!user) {
+      throw new Error("User not found");
+    }
+    const isPasswordValid = await user.comparePassword(currentPassword);
+    if (!isPasswordValid) {
+      throw new Error("Invalid current password");
+    }
+    const newPasswordHash = await hash(newPassword, 10);
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, {password: newPasswordHash},{new: true});
+    res.status(200).json({status: 200, user:updatedUser});
+  }
+  else{
+    res.status(200).json({message: "User not found"})
+  }
+};
+
+
+
+
+/**
+ * Update user
+ */
+export const updateUserProfile = async (req: Request, res: Response) => {
+  const { fullName } = req.body;
+  if(req.user && req.user.id){
+    const user = await User.findById( req.user.id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+    if (fullName) {
+      const updatedUser = await User.findByIdAndUpdate(req.user.id, {fullName: fullName},{new: true});
+      res.status(200).json({status: 200,user:updatedUser});
+    }    
+    else{
+      res.status(200).json({status: 200,message:"Fullname not specified"});
+
+    }
+  }
+};
+
+
+
+
+export const getAllUsers = async (_req: Request, res: Response) => {
+  const users = await User.find({ role: 'user' }).select('-password');
+  res.status(200).json({status: 200, users: users});
 };

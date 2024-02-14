@@ -9,6 +9,7 @@ let orderSchema = new Schema({
     endTime: { type: Date },
     address: {type: String},
     phone: {type: String},
+    city: {type: String},
     price: {type: Number},
     status: {
         type: String, enum: [Order_Status.DELIVERED, Order_Status.ON_ROUTE, Order_Status.PENDING],

@@ -6,24 +6,43 @@ import { Order } from "../models";
 export const createOrder =async (req: Request, res: Response) => {
       const orderData: IOrderDocument = req.body;
       const newOrder = await Order.create({...orderData, createdBy: req.user?.id});
-      res.status(200).json(newOrder);
+      res.status(200).json({status: 200, order:newOrder});
   };
 
     //Get all orders
 export const getAllOrders =async (_: Request, res: Response) => {
-    const orders = await Order.find();
-    res.status(200).json(orders);
+  const orders = await Order.find()
+      .populate({
+        path: 'createdBy',
+      })
+      .populate('items.menuItemId'
+     )
+      .populate(
+         'items.addOns.addOnId');  
+      console.log(orders[0].items)
+      
+      res.status(200).json(orders);
   };
 
 
   // Get a order item by ID
 export const getOrderById =async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate({
+      path: 'createdBy',
+    })
+    .populate({
+      path: 'items.menuItemId',
+      model: 'Menu',
+    })
+    .populate({
+      path: 'items.addOns.addOnId',
+      model: 'AddOn',
+    }); 
     if (!order) {
       res.status(404).json({ error: 'Order Not found' });
       return;
     }
-    res.json(order);
+    res.status(200).json({status: 200, order: order});
   };
 
 
@@ -38,7 +57,7 @@ export const updateOrderById =async (req: Request, res: Response) => {
         res.status(404).json({ error: 'Order not found' });
         return;
       }
-      res.json(updatedOrder);
+      res.status(200).json({status: 200, order: updatedOrder});
   };
 
 
