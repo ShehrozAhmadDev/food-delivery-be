@@ -6,6 +6,7 @@
   "scripts": {
     "pre-install": "npm i -g ts-node",
     "tsc": "tsc",
+    "build": "tsc",
     "server": "tsc && nodemon ./dist/server.js",
     "dev": "tsc && nodemon ./server.js",
     "start": "tsc & node ./dist/server.js",
