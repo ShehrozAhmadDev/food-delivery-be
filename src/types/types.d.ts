@@ -37,6 +37,7 @@ export interface IAddOnDocument extends Document, ITimestamps {
   name: string;
   description: string;
   category: string;
+  imageUrl: string;
   price: number;
   createdBy: mongoose.Types.ObjectId;
 }

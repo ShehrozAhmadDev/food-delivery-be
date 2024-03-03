@@ -8,6 +8,7 @@ let addOnSchema = new Schema({
     description: { type: String },
     category: { type: String },
     price: {type: Number},
+    imageUrl: {type: String},
     createdBy: {
         type: Schema.Types.ObjectId, ref: "User"
      },

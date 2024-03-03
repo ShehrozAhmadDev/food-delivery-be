@@ -3,15 +3,41 @@ import {  addAddOnItem, deleteAddOnItemById, getAddOnItemById, getAllAddOnItems,
 import { catchErrors } from "../middleware/error.middleware";
 import { verifyIsAdmin, verifyToken } from "../middleware/auth.middleware";
 const router: Router = Router();
+import multer from "multer";
 
+let storage = multer.diskStorage({
+    destination: function (_req, _file, callback) {
+      callback(null, "uploads");
+    },
+    filename: function (_req, file, callback) {
+      if (file.originalname.length > 6)
+        callback(
+          null,
+          file.fieldname +
+            "-" +
+            Date.now() +
+            file.originalname.substr(
+              file.originalname.length - 6,
+              file.originalname.length
+            )
+        );
+      else callback(null, file.fieldname + "-" + Date.now() + file.originalname);
+    },
+  });
+
+  const upload = multer({ storage: storage });
+
+  const cpUpload = upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+  ]);
 //Get all addon items
-router.get("/",verifyToken, catchErrors(getAllAddOnItems));
+router.get("/", catchErrors(getAllAddOnItems));
 //Get addon item By id
-router.get("/:id",verifyToken, catchErrors(getAddOnItemById));
+router.get("/:id", catchErrors(getAddOnItemById));
 //Add addon items
-router.post("/",verifyToken, verifyIsAdmin, catchErrors(addAddOnItem));
+router.post("/",verifyToken, verifyIsAdmin, cpUpload, catchErrors(addAddOnItem));
 //Update addon item by id
-router.put("/:id",verifyToken, verifyIsAdmin, catchErrors(updateAddOnItemById));
+router.put("/:id",verifyToken, verifyIsAdmin, cpUpload, catchErrors(updateAddOnItemById));
 //Delete addon items By id
 router.delete("/:id",verifyToken, verifyIsAdmin, catchErrors(deleteAddOnItemById));
 
