@@ -29,6 +29,7 @@ export interface IMenuDocument extends Document, ITimestamps {
   isFeatured: boolean;
   quantity: number;
   price: number;
+  flavours: string[];
   createdBy: mongoose.Types.ObjectId;
   imageUrl: string
 }

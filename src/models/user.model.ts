@@ -29,7 +29,7 @@ const userSchema = new Schema<IUserDocument>(
     },
     role: {
       type: String,
-      enum: [Roles.ADMIN, Roles.USER],
+      enum: [Roles.ADMIN, Roles.USER, Roles.SUPERADMIN],
       default: Roles.USER,
     },
   },

@@ -11,6 +11,7 @@ let menuSchema = new Schema({
     price: {type: Number},
     quantity: {type: Number},
     imageUrl: {type: String},
+    flavours: {type: [String]},
     createdBy: {
         type: Schema.Types.ObjectId, ref: "User"
      },
