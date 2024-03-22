@@ -76,6 +76,15 @@ export const myProfile = async (
   return res.status(200).json({ user });
 };
 
+
+export const deleteUser = async (
+  req: Request,
+  res: Response
+): Promise<Response<IUserDocument>> => {
+  const user = await User.findByIdAndDelete(req?.user?._id);
+  return res.status(200).json({ status: 200, user: user });
+};
+
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email }: { email: string } = req?.body;
 

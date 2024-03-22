@@ -46,6 +46,30 @@ export const getOrderById =async (req: Request, res: Response) => {
   };
 
 
+  // Get a order item by ID
+  export const getUsersOrder =async (req: Request, res: Response) => {
+    const order = await Order.find({createdBy: req.params.id}).populate({
+      path: 'createdBy',
+    })
+    .populate({
+      path: 'items.menuItemId',
+      model: 'Menu',
+    })
+    .populate({
+      path: 'items.addOns.addOnId',
+      model: 'AddOn',
+    }); 
+    if (!order) {
+      res.status(404).json({ error: 'Order Not found' });
+      return;
+    }
+    res.status(200).json({status: 200, order: order});
+  };
+
+
+
+
+
   // Update a order item by ID
 export const updateOrderById =async (req: Request, res: Response) => {
     const updatedOrder = await Order.findByIdAndUpdate(
