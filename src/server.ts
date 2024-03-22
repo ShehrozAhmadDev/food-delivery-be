@@ -34,6 +34,9 @@ database();
 
 
 //Initialize Routes
+app.get('/', (req, res) => {
+  res.send("API RUNNING");
+});
 app.use("/api", apiRoutes);
 
 
