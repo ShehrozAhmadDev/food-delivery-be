@@ -2,7 +2,7 @@
   "name": "food-delivery-be",
   "version": "1.0.0",
   "main": "server.ts",
-  "license": "MIT",
+  "license": "ISC",
   "scripts": {
     "start": "nodemon src/index.ts",
     "build": "rimraf dist && tsc",
