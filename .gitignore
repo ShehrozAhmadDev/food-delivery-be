@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-/uploads
+# /uploads
 # testing
 /coverage
 /dist
@@ -13,14 +13,14 @@
 /build
 
 # env protect
-.env
+# .env
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
 
 npm-debug.log*
 yarn-debug.log*
