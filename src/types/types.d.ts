@@ -34,6 +34,10 @@ export interface IMenuDocument extends Document, ITimestamps {
   imageUrl: string
 }
 
+
+export interface IBannerDocument extends Document, ITimestamps {
+  imageUrl: string
+}
 export interface IAddOnDocument extends Document, ITimestamps {
   name: string;
   description: string;
