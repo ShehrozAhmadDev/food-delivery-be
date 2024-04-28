@@ -1,24 +1,33 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import { IMenuDocument } from "../types/types";
-import { model } from "mongoose";
-let Schema = mongoose.Schema;
 
-let menuSchema = new Schema({
-    name: { type: String, required: true },
-    description: { type: String },
-    category: { type: String },
-    isFeatured: {type: Boolean},
-    price: {type: Number},
-    quantity: {type: Number},
-    imageUrl: {type: String},
-    flavours: {type: [String]},
-    createdBy: {
-        type: Schema.Types.ObjectId, ref: "User"
-     },
-    image: {type: String},
-    createdAt: {type: Date, default: Date.now()}
+// Define interface for variations
+interface IMenuVariation {
+  flavour: string;
+  sizes: { size: number; price: number }[];
+}
+
+const menuVariationSchema = new Schema<IMenuVariation>({
+  flavour: { type: String },
+  sizes: [{ size: { type: String }, price: { type: Number } }],
 });
 
-const Menu = model<IMenuDocument>("Menu", menuSchema);
+// Define mongoose schema for menu
+const menuSchema = new Schema<IMenuDocument>({
+  name: { type: String, required: true },
+  description: { type: String },
+  category: { type: String },
+  isFeatured: { type: Boolean },
+  price: { type: Number },
+  quantity: { type: Number },
+  imageUrl: { type: String },
+  variations: { type: [menuVariationSchema], default: [] },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+});
+
+// Define mongoose schema for variations
+
+// Define model
+const Menu = mongoose.model<IMenuDocument>("Menu", menuSchema);
 
 export default Menu;

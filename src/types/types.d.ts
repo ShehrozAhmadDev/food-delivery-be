@@ -1,6 +1,4 @@
 import { Types, Document } from "mongoose";
-import { ReadStream } from "fs";
-import { Model } from "mongoose";
 
 declare global {
   namespace Express {
@@ -22,6 +20,11 @@ export interface IUserDocument extends userI, Document, ITimestamps {
   role: string;
 }
 
+export interface IVariations {
+  flavour: string;
+  sizes: { size: string; price: number }[];
+}
+
 export interface IMenuDocument extends Document, ITimestamps {
   name: string;
   description: string;
@@ -29,14 +32,13 @@ export interface IMenuDocument extends Document, ITimestamps {
   isFeatured: boolean;
   quantity: number;
   price: number;
-  flavours: string[];
+  variations: IVariations[];
   createdBy: mongoose.Types.ObjectId;
-  imageUrl: string
+  imageUrl: string;
 }
 
-
 export interface IBannerDocument extends Document, ITimestamps {
-  imageUrl: string
+  imageUrl: string;
 }
 export interface IAddOnDocument extends Document, ITimestamps {
   name: string;
