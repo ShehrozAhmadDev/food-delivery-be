@@ -1,5 +1,5 @@
 import { Types, Document } from "mongoose";
-
+import mongoose from "mongoose";
 declare global {
   namespace Express {
     interface Request {
@@ -13,7 +13,7 @@ interface userI {
   password: string;
 }
 
-export interface IUserDocument extends userI, Document, ITimestamps {
+export interface IUserDocument extends userI, Document {
   comparePassword(password: string): Promise<boolean>;
   getToken(): string;
   verified: boolean;
@@ -25,22 +25,24 @@ export interface IVariations {
   sizes: { size: string; price: number }[];
 }
 
-export interface IMenuDocument extends Document, ITimestamps {
+export interface IMenuDocument extends Document {
   name: string;
   description: string;
   category: string;
   isFeatured: boolean;
+  sizes: { size: string; price: number }[];
+  quantities: { quantity: string; price: number }[];
+  flavours: string[];
   quantity: number;
   price: number;
-  variations: IVariations[];
   createdBy: mongoose.Types.ObjectId;
   imageUrl: string;
 }
 
-export interface IBannerDocument extends Document, ITimestamps {
+export interface IBannerDocument extends Document {
   imageUrl: string;
 }
-export interface IAddOnDocument extends Document, ITimestamps {
+export interface IAddOnDocument extends Document {
   name: string;
   description: string;
   category: string;
@@ -49,7 +51,7 @@ export interface IAddOnDocument extends Document, ITimestamps {
   createdBy: mongoose.Types.ObjectId;
 }
 
-export interface IOrderDocument extends Document, ITimestamps {
+export interface IOrderDocument extends Document {
   startTime: Date;
   endTime: Date;
   address: string;
@@ -57,14 +59,14 @@ export interface IOrderDocument extends Document, ITimestamps {
   price: number;
   status: string;
   items: {
-    menuItemId: mongoose.Types.ObjectId;
+    menuItem: mongoose.Types.ObjectId;
     quantity: number;
-    addOns: { addOnId: mongoose.Types.ObjectId; quantity: number }[];
+    addOns: { addOn: mongoose.Types.ObjectId; quantity: number }[];
   }[];
   createdBy: mongoose.Types.ObjectId;
 }
 
-export interface IOrders extends Document, ITimestamps {
+export interface IOrders extends Document {
   categoryId: Types.ObjectId;
 }
 

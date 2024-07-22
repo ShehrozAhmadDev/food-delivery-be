@@ -11,7 +11,6 @@ export const addMenuItem = async (
   console.log(req.body);
   try {
     const menuData: IMenuDocument = req.body;
-    console.log("Variations", JSON.parse(req.body.variations));
     const thumbnailPromise = new Promise(async (resolve) => {
       const files: any = req.files;
       const thumbnailFile =
@@ -33,13 +32,12 @@ export const addMenuItem = async (
     });
     Promise.resolve(thumbnailPromise).then(async (results: any) => {
       menuData.imageUrl = results;
-      console.log(results);
-      console.log(menuData);
       const newMenu = await new Menu({
         ...menuData,
-        isFeatured: false,
-        price: JSON.parse(req.body.price),
-        variations: JSON.parse(req.body.variations),
+        sizes: JSON.parse(req.body.sizes),
+        quantities: JSON.parse(req.body.quantities),
+        isFeatured: req.body.isFeatured,
+        price: parseInt(req.body.price),
         createdBy: req.user?.id,
       });
       const savedMenu = newMenu.save();
@@ -56,7 +54,6 @@ export const getAllMenuItems = async (_: Request, res: Response) => {
   const menus = await Menu.find();
   res.status(200).json({ status: 200, menu: menus });
 };
-
 // Get a menu item by ID
 export const getMenuItemById = async (req: Request, res: Response) => {
   const menu = await Menu.findById(req.params.id);
@@ -96,7 +93,11 @@ export const updateMenuItemById = async (req: Request, res: Response) => {
         menuData.imageUrl = results;
         const updatedMenu = await Menu.findByIdAndUpdate(
           req.params.id,
-          { ...menuData, variations: JSON.parse(req.body.variations) },
+          {
+            ...menuData,
+            sizes: JSON.parse(req.body.sizes),
+            quantities: JSON.parse(req.body.quantities),
+          },
           { new: true }
         );
         if (!updatedMenu) {
